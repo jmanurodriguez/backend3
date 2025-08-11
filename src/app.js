@@ -36,12 +36,13 @@ app.get('/', (req, res) => {
 });
 
 app.get('/health', (req, res) => {
-    res.send({status:'ok'});
+    res.send({status:'ok', db: mongoose.connection.readyState});
 });
 
 const start = async () => {
     try {
         await mongoose.connect('mongodb://localhost:27017/db_example?directConnection=true');
+    console.log('Mongo connected');
     } catch (err) {
         console.log('Mongo connection error:', err.message);
     }
