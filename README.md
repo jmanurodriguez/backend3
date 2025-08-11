@@ -1,0 +1,306 @@
+# AdoptMe API - Backend III
+
+Sistema de gestión de adopciones de mascotas con funcionalidades de mocking y testing.
+
+## 🚀 Características
+
+- ✅ API REST para gestión de usuarios, mascotas, adopciones y sesiones
+- ✅ Sistema de mocking para generar datos de prueba
+- ✅ Tests funcionales con Mocha y Supertest
+- ✅ Base de datos MongoDB con Mongoose
+- ✅ Autenticación JWT con cookies
+- ✅ Encriptación de contraseñas con bcrypt
+
+## 📋 Requisitos
+
+- Node.js v20+
+- MongoDB v6+
+- npm v8+
+
+## 🛠️ Instalación
+
+1. Clona el repositorio:
+```bash
+git clone <repository-url>
+cd RecursosBackend-Adoptme-main
+```
+
+2. Instala las dependencias:
+```bash
+npm install
+```
+
+3. Asegúrate de que MongoDB esté ejecutándose en:
+```
+mongodb://localhost:27017/db_example
+```
+
+## 🎯 Scripts disponibles
+
+```bash
+# Iniciar servidor en producción
+npm start
+
+# Iniciar servidor en modo desarrollo con nodemon
+npm run dev
+
+# Ejecutar tests
+npm test
+```
+
+## 📡 Endpoints de la API
+
+### Base URL: `http://localhost:8080`
+
+### 🏥 Health Check
+- `GET /health` - Estado del servidor y conexión a BD
+
+### 👥 Usuarios
+- `GET /api/users` - Obtener todos los usuarios
+- `GET /api/users/:uid` - Obtener usuario por ID
+- `PUT /api/users/:uid` - Actualizar usuario
+- `DELETE /api/users/:uid` - Eliminar usuario
+
+### 🐕 Mascotas
+- `GET /api/pets` - Obtener todas las mascotas
+- `POST /api/pets` - Crear nueva mascota
+- `POST /api/pets/withimage` - Crear mascota con imagen
+- `PUT /api/pets/:pid` - Actualizar mascota
+- `DELETE /api/pets/:pid` - Eliminar mascota
+
+### 🤝 Adopciones
+- `GET /api/adoptions` - Obtener todas las adopciones
+- `GET /api/adoptions/:aid` - Obtener adopción por ID
+- `POST /api/adoptions/:uid/:pid` - Crear nueva adopción
+
+### 🔐 Sesiones
+- `POST /api/sessions/register` - Registrar nuevo usuario
+- `POST /api/sessions/login` - Iniciar sesión
+- `GET /api/sessions/current` - Usuario actual (protegido)
+- `POST /api/sessions/unprotectedLogin` - Login sin protección
+- `GET /api/sessions/unprotectedCurrent` - Usuario actual (sin protección)
+
+## 🎭 Endpoints de Mocking
+
+### Base: `/api/mocks`
+
+#### `GET /api/mocks/mockingpets`
+Genera mascotas ficticias para pruebas.
+
+**Parámetros:**
+- `count` (query, opcional): Número de mascotas a generar (default: 100)
+
+**Ejemplo:**
+```bash
+curl "http://localhost:8080/api/mocks/mockingpets?count=5"
+```
+
+**Respuesta:**
+```json
+{
+  "status": "success",
+  "payload": [
+    {
+      "name": "Luna",
+      "specie": "dog",
+      "birthDate": "2020-05-15T00:00:00.000Z",
+      "adopted": false,
+      "image": ""
+    }
+  ]
+}
+```
+
+#### `GET /api/mocks/mockingusers`
+Genera usuarios ficticios con características específicas.
+
+**Parámetros:**
+- `count` (query, opcional): Número de usuarios a generar (default: 50)
+
+**Características de usuarios generados:**
+- ✅ Password: "coder123" (encriptada con bcrypt)
+- ✅ Role: "user" o "admin" (aleatorio)
+- ✅ Pets: Array vacío []
+- ✅ Email único para evitar conflictos
+- ✅ Formato compatible con MongoDB
+
+**Ejemplo:**
+```bash
+curl "http://localhost:8080/api/mocks/mockingusers?count=3"
+```
+
+**Respuesta:**
+```json
+{
+  "status": "success",
+  "payload": [
+    {
+      "first_name": "Juan",
+      "last_name": "Pérez",
+      "email": "juan.perez.0.1691234567890@example.com",
+      "password": "$2b$10$...",
+      "role": "user",
+      "pets": []
+    }
+  ]
+}
+```
+
+#### `POST /api/mocks/generateData`
+Genera e inserta datos directamente en la base de datos.
+
+**Body JSON:**
+```json
+{
+  "users": 10,
+  "pets": 15
+}
+```
+
+**Ejemplo:**
+```bash
+curl -X POST "http://localhost:8080/api/mocks/generateData" \
+  -H "Content-Type: application/json" \
+  -d '{"users": 5, "pets": 10}'
+```
+
+**Respuesta:**
+```json
+{
+  "status": "success",
+  "payload": {
+    "users": 5,
+    "pets": 10
+  }
+}
+```
+
+## 🧪 Testing
+
+El proyecto incluye una suite completa de tests:
+
+### Ejecutar tests:
+```bash
+npm test
+```
+
+### Tests incluidos:
+- ✅ **Mocks Router**: Validación de endpoints de mocking
+- ✅ **GenerateData**: Inserción en BD y verificación
+- ✅ **Adoptions Router**: Tests funcionales completos
+  - Creación de adopciones
+  - Validación de errores (mascota ya adoptada, usuario/mascota inexistente)
+  - Endpoints GET
+
+### Cobertura:
+- 7 tests passing
+- Integración con MongoDB
+- Validación de respuestas y estados HTTP
+
+## 🗄️ Estructura del Proyecto
+
+```
+src/
+├── controllers/          # Lógica de controladores
+│   ├── mocks.controller.js
+│   ├── users.controller.js
+│   ├── pets.controller.js
+│   ├── adoptions.controller.js
+│   └── sessions.controller.js
+├── routes/               # Definición de rutas
+│   ├── mocks.router.js
+│   ├── users.router.js
+│   ├── pets.router.js
+│   ├── adoption.router.js
+│   └── sessions.router.js
+├── services/             # Capa de servicios
+├── dao/                  # Data Access Objects
+├── models/               # Modelos de Mongoose
+├── utils/                # Utilidades
+│   ├── mocking.js        # Generadores de datos ficticios
+│   ├── index.js          # Funciones de utilidad
+│   └── uploader.js       # Configuración de multer
+├── dto/                  # Data Transfer Objects
+└── app.js                # Configuración principal
+
+test/                     # Tests
+├── mocks.test.js
+├── generateData.test.js
+└── adoptions.test.js
+```
+
+## 🔧 Configuración
+
+### Variables de entorno:
+- `PORT`: Puerto del servidor (default: 8080)
+- `NODE_ENV`: Entorno de ejecución (test/development/production)
+
+### Base de datos:
+- URL: `mongodb://localhost:27017/db_example`
+- Colecciones: `users`, `pets`, `adoptions`
+
+## 📖 Ejemplos de uso
+
+### 1. Generar datos de prueba:
+```bash
+# Generar 10 usuarios y 20 mascotas en la BD
+curl -X POST "http://localhost:8080/api/mocks/generateData" \
+  -H "Content-Type: application/json" \
+  -d '{"users": 10, "pets": 20}'
+```
+
+### 2. Verificar inserción:
+```bash
+# Ver usuarios creados
+curl "http://localhost:8080/api/users"
+
+# Ver mascotas creadas
+curl "http://localhost:8080/api/pets"
+```
+
+### 3. Crear adopción:
+```bash
+# Crear adopción (reemplazar IDs reales)
+curl -X POST "http://localhost:8080/api/adoptions/USER_ID/PET_ID"
+```
+
+## 🐛 Troubleshooting
+
+### Error de conexión a MongoDB:
+```bash
+# Verificar que MongoDB esté ejecutándose
+mongosh mongodb://localhost:27017/db_example
+```
+
+### Puerto en uso:
+```bash
+# Cambiar puerto en el archivo o variable de entorno
+PORT=3000 npm start
+```
+
+### Tests fallando:
+```bash
+# Verificar conexión a MongoDB durante tests
+NODE_ENV=test npm test
+```
+
+## 📝 Notas importantes
+
+1. **Usuarios de prueba**: Todos tienen password "coder123"
+2. **Emails únicos**: Se genera un timestamp para evitar duplicados
+3. **Tests**: Usan la misma BD pero en modo test
+4. **Adopciones**: Una mascota solo puede ser adoptada una vez
+
+## 🏆 Criterios de entrega cumplidos
+
+- ✅ Router `/api/mocks` creado y funcional
+- ✅ Endpoint `/mockingpets` migrado exitosamente
+- ✅ Módulo de mocking con usuarios según especificaciones
+- ✅ Endpoint `/mockingusers` con 50 usuarios por defecto
+- ✅ Endpoint `/generateData` para inserción en BD
+- ✅ Verificación mediante servicios GET de users y pets
+- ✅ Tests funcionales completos
+
+---
+
+**Desarrollado para Backend III - Testing y Escalabilidad Backend**
