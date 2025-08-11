@@ -10,7 +10,6 @@ import mocksRouter from './routes/mocks.router.js';
 
 const app = express();
 const PORT = process.env.PORT||8080;
-const connection = mongoose.connect(`mongodb://localhost:27017/db_example?directConnection=true`)
 
 app.use(express.json());
 app.use(cookieParser());
@@ -36,6 +35,19 @@ app.get('/', (req, res) => {
     res.send(`${style}${content}`);
 });
 
-app.listen(PORT,()=>{
-    console.log(`Server is running on port http://localhost:${PORT}`);
+app.get('/health', (req, res) => {
+    res.send({status:'ok'});
 });
+
+const start = async () => {
+    try {
+        await mongoose.connect('mongodb://localhost:27017/db_example?directConnection=true');
+    } catch (err) {
+        console.log('Mongo connection error:', err.message);
+    }
+    app.listen(PORT,()=>{
+        console.log(`Server is running on port http://localhost:${PORT}`);
+    });
+};
+
+start();
