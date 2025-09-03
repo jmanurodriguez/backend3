@@ -52,6 +52,9 @@ npm test
 
 ### Base URL: `http://localhost:8080`
 
+### 📖 Documentación API
+- `GET /api-docs` - Documentación interactiva con Swagger UI
+
 ### 🏥 Health Check
 - `GET /health` - Estado del servidor y conexión a BD
 
@@ -229,7 +232,28 @@ test/                     # Tests
 └── adoptions.test.js
 ```
 
-## 🔧 Configuración
+## � Documentación de la API
+
+### Swagger UI
+El proyecto incluye documentación interactiva completa usando Swagger/OpenAPI 3.0.
+
+**Acceso:** `http://localhost:8080/api-docs`
+
+**Características:**
+- ✅ Documentación completa del módulo Users
+- ✅ Esquemas de datos definidos
+- ✅ Ejemplos de request/response
+- ✅ Interfaz interactiva para probar endpoints
+- ✅ Códigos de estado HTTP documentados
+
+**Módulos documentados:**
+- 👥 **Users**: CRUD completo de usuarios
+  - `GET /api/users` - Listar todos los usuarios
+  - `GET /api/users/:uid` - Obtener usuario por ID
+  - `PUT /api/users/:uid` - Actualizar usuario
+  - `DELETE /api/users/:uid` - Eliminar usuario
+
+## �🔧 Configuración
 
 ### Variables de entorno:
 - `PORT`: Puerto del servidor (default: 8080)
