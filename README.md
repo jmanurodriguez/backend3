@@ -1,11 +1,39 @@
 # AdoptMe API - Backend III
 
-Sistema de gestión de adopciones de mascotas con funcionalidades de mocking y testing.
+Sistema de gestión de adopciones de mascotas con funcionalidades de mocking, testing y Docker.
+
+## 🚀 Inicio Rápido
+
+### Opción 1: Docker (Recomendado) 🐳
+```bash
+# Ejecutar aplicación completa desde DockerHub
+git clone <repository-url>
+cd RecursosBackend-Adoptme-main
+docker-compose up -d
+
+# ¡Listo! Aplicación disponible en http://localhost:8080
+```
+
+### Opción 2: Ejecución Individual
+```bash
+# Solo la aplicación desde DockerHub
+docker run -p 8080:8080 \
+  -e MONGO_URL=mongodb://host.docker.internal:27017/adoptme \
+  jmanurodriguez/adoptme-api:latest
+```
 
 ## 🚀 Características
 
 - ✅ API REST para gestión de usuarios, mascotas, adopciones y sesiones
-- ✅ Sistema de mocking para generar datos de prue## 🔧 Configuración
+- ✅ Sistema de mocking para generar datos de prueba
+- ✅ Tests funcionales con Mocha y Supertest
+- ✅ Base de datos MongoDB con Mongoose
+- ✅ Autenticación JWT con cookies
+- ✅ Encriptación de contraseñas con bcrypt
+- ✅ **Documentación Swagger/OpenAPI 3.0**
+- ✅ **Configuración por entornos (.env)**
+- ✅ **Dockerización completa**
+- ✅ **Imagen en DockerHub pública**
 
 ### Variables de entorno
 El proyecto utiliza archivos `.env` para la configuración:
@@ -55,47 +83,145 @@ LOG_LEVEL=debug
 
 ## 📋 Requisitos
 
-- Node.js v20+
+### Instalación Local
+- Node.js v18+
 - MongoDB v6+
 - npm v8+
 
+### Instalación con Docker
+- Docker v20+
+- Docker Compose v2+
+
 ## 🛠️ Instalación
 
-1. Clona el repositorio:
+### Opción 1: Docker (Recomendado)
 ```bash
+# Clonar repositorio
 git clone <repository-url>
 cd RecursosBackend-Adoptme-main
+
+# Ejecutar con Docker Compose
+npm run docker:prod
 ```
 
-2. Instala las dependencias:
+### Opción 2: Instalación Local
 ```bash
+# Clonar repositorio
+git clone <repository-url>
+cd RecursosBackend-Adoptme-main
+
+# Instalar dependencias
 npm install
-```
 
-3. Configura las variables de entorno:
-```bash
-# Copia el archivo de ejemplo
+# Configurar variables de entorno
 cp .env.example .env
 
-# Edita el archivo .env con tus configuraciones
-```
+# Asegurar MongoDB ejecutándose
+# mongodb://localhost:27017/db_example
 
-4. Asegúrate de que MongoDB esté ejecutándose en:
-```
-mongodb://localhost:27017/db_example
+# Iniciar aplicación
+npm start
 ```
 
 ## 🎯 Scripts disponibles
 
 ```bash
-# Iniciar servidor en producción
-npm start
+# Desarrollo
+npm start                # Iniciar servidor en producción
+npm run dev             # Iniciar servidor en modo desarrollo con nodemon
+npm test                # Ejecutar tests
 
-# Iniciar servidor en modo desarrollo con nodemon
-npm run dev
+# Docker
+npm run docker:build    # Construir imagen Docker
+npm run docker:run      # Ejecutar contenedor individual
+npm run docker:dev      # Modo desarrollo con Docker Compose
+npm run docker:prod     # Modo producción con Docker Compose + MongoDB
+npm run docker:logs     # Ver logs de contenedores
+npm run docker:stop     # Detener servicios Docker
+```
 
-# Ejecutar tests
-npm test
+## 🐳 Docker
+
+### 🚀 Imagen en DockerHub
+La aplicación está disponible como imagen Docker pública:
+
+**🔗 Link de la imagen:** `https://hub.docker.com/r/jmanurodriguez/adoptme-api`
+
+### 🌍 Acceso Público - Sin Autenticación Requerida
+
+**✅ IMAGEN COMPLETAMENTE PÚBLICA**
+- Cualquier persona puede descargar la imagen sin login
+- No se requiere cuenta de DockerHub para usar la imagen
+- Accesible globalmente para evaluación y uso
+
+### Ejecución rápida desde DockerHub
+```bash
+# ✅ IMAGEN DISPONIBLE PÚBLICAMENTE (Sin login requerido)
+docker pull jmanurodriguez/adoptme-api:latest
+
+# ✅ FUNCIONANDO CORRECTAMENTE
+docker run -p 8080:8080 \
+  -e MONGO_URL=mongodb://host.docker.internal:27017/adoptme \
+  jmanurodriguez/adoptme-api:latest
+
+# ✅ ACCESO A DOCUMENTACIÓN
+# http://localhost:8080/api-docs (cuando la aplicación esté corriendo)
+
+# O con Docker Compose usando imagen de DockerHub
+docker-compose up -d
+```
+
+### 📋 Verificación de Acceso Público
+
+**Comandos que cualquier persona puede ejecutar sin autenticación:**
+
+```bash
+# Descargar imagen (sin login)
+docker pull jmanurodriguez/adoptme-api:latest
+
+# Verificar imagen descargada
+docker images | findstr adoptme
+
+# Ejecutar aplicación completa
+docker run --rm -p 8080:8080 jmanurodriguez/adoptme-api:latest
+```
+
+**Acceso garantizado para:**
+- ✅ **Profesores**: Evaluación directa sin setup adicional
+- ✅ **Estudiantes**: Reproducción inmediata del proyecto  
+- ✅ **Desarrollo**: Uso en cualquier entorno Docker
+- ✅ **Producción**: Despliegue en servidores remotos
+
+### Ejecución local con código fuente
+```bash
+# Construir y ejecutar con Docker Compose (recomendado)
+npm run docker:prod
+
+# O manualmente
+docker-compose up --build -d
+```
+
+### Imagen Docker
+- ✅ **Multi-stage build** para optimización
+- ✅ **Usuario no-root** para seguridad
+- ✅ **Health check** integrado
+- ✅ **Imagen Alpine** (tamaño reducido)
+- ✅ **Variables de entorno** configurables
+- ✅ **Disponible en DockerHub** públicamente
+
+### Servicios incluidos
+- **AdoptMe API**: Puerto 8080
+- **MongoDB**: Puerto 27017
+- **Health Check**: `/health`
+- **Swagger Docs**: `/api-docs`
+
+### Configuración Docker
+```yaml
+# Variables de entorno recomendadas
+NODE_ENV=production
+MONGO_URL=mongodb://mongo:27017/adoptme_prod
+JWT_SECRET=your-secure-secret-key
+CORS_ORIGIN=https://your-domain.com
 ```
 
 ## 📡 Endpoints de la API
@@ -269,6 +395,11 @@ src/test/
 ├── .env                  # Variables de entorno (development)
 ├── .env.test            # Variables de entorno (testing)
 ├── .gitignore           # Archivos ignorados por git
+├── .dockerignore        # Archivos ignorados por Docker
+├── Dockerfile           # Imagen Docker multi-stage
+├── docker-compose.yml   # Servicios Docker para producción
+├── docker-compose.dev.yml # Servicios Docker para desarrollo
+├── docker-guide.md      # Guía de uso de Docker
 ├── package.json         # Dependencias y scripts
 ├── README.md           # Documentación del proyecto
 └── src/
@@ -378,23 +509,60 @@ PORT=3000 npm start
 NODE_ENV=test npm test
 ```
 
-## 📝 Notas importantes
-
-1. **Usuarios de prueba**: Todos tienen password "coder123"
-2. **Emails únicos**: Se genera un timestamp para evitar duplicados
-3. **Tests**: Usan la misma BD pero en modo test
-4. **Adopciones**: Una mascota solo puede ser adoptada una vez
-
 ## 🏆 Criterios de entrega cumplidos
 
-- ✅ Router `/api/mocks` creado y funcional
-- ✅ Endpoint `/mockingpets` migrado exitosamente
-- ✅ Módulo de mocking con usuarios según especificaciones
-- ✅ Endpoint `/mockingusers` con 50 usuarios por defecto
-- ✅ Endpoint `/generateData` para inserción en BD
-- ✅ Verificación mediante servicios GET de users y pets
-- ✅ Tests funcionales completos
+### ✅ Documentación Swagger
+- **Módulo Users completamente documentado** con OpenAPI 3.0
+- Interfaz interactiva disponible en `/api-docs`
+- Esquemas de datos, ejemplos y códigos de respuesta
+- Integración completa con Express
+
+### ✅ Tests Funcionales - Adoption Router
+- **Cobertura completa** de todos los endpoints:
+  - `GET /api/adoptions` - Listar adopciones
+  - `GET /api/adoptions/:aid` - Obtener por ID
+  - `POST /api/adoptions/:uid/:pid` - Crear adopción
+- **Casos de éxito y error** implementados:
+  - Usuario inexistente (404)
+  - Mascota inexistente (404) 
+  - Mascota ya adoptada (400)
+  - Validación de integridad de datos
+- **13 tests passing** con Mocha y Supertest
+
+### ✅ Dockerfile
+- **Multi-stage build** para optimización
+- **Usuario no-root** para seguridad
+- **Imagen Alpine** para tamaño mínimo
+- **Health check integrado**
+- **Variables de entorno configurables**
+- **Reproducible** y listo para producción
+
+### ✅ DockerHub
+- **Imagen pública** disponible: `jmanurodriguez/adoptme-api`
+- **Acceso sin autenticación**: Cualquier persona puede usar `docker pull`
+- **URL pública**: https://hub.docker.com/r/jmanurodriguez/adoptme-api
+- **Tags disponibles**: `latest` y versiones específicas
+- **Accesible globalmente** para despliegue
+- **Docker Compose** configurado para usar imagen pública
+
+### ✅ README.md Completo
+- **Instrucciones detalladas** de instalación
+- **Documentación Docker** completa
+- **Enlaces a DockerHub** y recursos
+- **Guías de uso** paso a paso
+- **Variables de entorno** documentadas
+- **Acceso público confirmado** - Sin autenticación requerida
+
+### 🌍 Información de Entrega
+
+**Para evaluación del proyecto:**
+- **Imagen DockerHub**: https://hub.docker.com/r/jmanurodriguez/adoptme-api
+- **Acceso**: Público, sin login requerido
+- **Comando directo**: `docker pull jmanurodriguez/adoptme-api:latest`
+- **Documentación**: Swagger UI en `http://localhost:8080/api-docs`
+- **Tests**: 13 tests funcionales pasando
+- **Estado**: ✅ Completamente funcional y accesible
 
 ---
 
-**Desarrollado para Backend III - Testing y Escalabilidad Backend**
+**Desarrollado para Backend III - Testing y Escalabilidad Backend Por Juan Manuel Rodriguez**

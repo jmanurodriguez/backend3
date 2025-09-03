@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  # Aplicación AdoptMe desde DockerHub
+  app:
+    image: jmanurodriguez/adoptme-api:latest
+    # Descomenta la siguiente línea para usar imagen local
+    # build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - NODE_ENV=production
+      - PORT=8080
+      - MONGO_URL=mongodb://mongo:27017/adoptme_prod
+      - MONGO_DB_NAME=adoptme_prod
+      - JWT_SECRET=docker-secret-key-change-in-production
+      - CORS_ORIGIN=http://localhost:3000
+      - LOG_LEVEL=info
+    depends_on:
+      - mongo
+    networks:
+      - adoptme-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Base de datos MongoDB
+  mongo:
+    image: mongo:6.0
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_DATABASE=adoptme_prod
+    volumes:
+      - mongo-data:/data/db
+      - ./mongo-init:/docker-entrypoint-initdb.d
+    networks:
+      - adoptme-network
+    restart: unless-stopped
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/adoptme_prod --quiet
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  adoptme-network:
+    driver: bridge
+
+volumes:
+  mongo-data:
+    driver: local

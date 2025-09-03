@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  # Aplicación AdoptMe en modo desarrollo
+  app-dev:
+    build: 
+      context: .
+      target: development
+    ports:
+      - "8080:8080"
+    environment:
+      - NODE_ENV=development
+      - PORT=8080
+      - MONGO_URL=mongodb://mongo-dev:27017/adoptme_dev
+      - MONGO_DB_NAME=adoptme_dev
+      - JWT_SECRET=dev-secret-key
+      - CORS_ORIGIN=http://localhost:3000
+      - LOG_LEVEL=debug
+    volumes:
+      - ./src:/usr/src/app/src
+      - /usr/src/app/node_modules
+    depends_on:
+      - mongo-dev
+    networks:
+      - adoptme-dev-network
+    command: npm run dev
+
+  # Base de datos MongoDB para desarrollo
+  mongo-dev:
+    image: mongo:6.0
+    ports:
+      - "27018:27017"
+    environment:
+      - MONGO_INITDB_DATABASE=adoptme_dev
+    volumes:
+      - mongo-dev-data:/data/db
+    networks:
+      - adoptme-dev-network
+
+networks:
+  adoptme-dev-network:
+    driver: bridge
+
+volumes:
+  mongo-dev-data:
+    driver: local
