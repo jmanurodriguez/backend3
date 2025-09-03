@@ -3,11 +3,12 @@ import mongoose from 'mongoose';
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../app.js';
+import { config } from '../config/environment.js';
 
 chai.use(chaiHttp);
 chai.should();
 
-const MONGO_URL = 'mongodb://localhost:27017/db_example?directConnection=true';
+const MONGO_URL = config.mongoUrl;
 
 const pickFirstId = (arr) => (arr && arr[0] && arr[0]._id) || (arr && arr[0] && arr[0].id);
 

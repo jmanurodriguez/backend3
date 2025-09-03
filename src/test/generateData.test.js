@@ -1,8 +1,9 @@
 import request from 'supertest';
 import mongoose from 'mongoose';
 import app from '../app.js';
+import { config } from '../config/environment.js';
 
-const MONGO_URL = 'mongodb://localhost:27017/db_example?directConnection=true';
+const MONGO_URL = config.mongoUrl;
 
 const countExampleUsers = (list) => list.filter(u => typeof u.email === 'string' && u.email.endsWith('@example.com')).length;
 

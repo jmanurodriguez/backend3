@@ -2,6 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 import { swaggerUi, specs } from './docs/swagger.config.js';
+import { config } from './config/environment.js';
 
 import usersRouter from './routes/users.router.js';
 import petsRouter from './routes/pets.router.js';
@@ -10,7 +11,7 @@ import sessionsRouter from './routes/sessions.router.js';
 import mocksRouter from './routes/mocks.router.js';
 
 const app = express();
-const PORT = process.env.PORT||8080;
+const PORT = config.port;
 
 app.use(express.json());
 app.use(cookieParser());
@@ -39,19 +40,26 @@ app.get('/', (req, res) => {
 });
 
 app.get('/health', (req, res) => {
-    res.send({status:'ok', db: mongoose.connection.readyState});
+    res.send({
+        status:'ok', 
+        environment: config.nodeEnv,
+        port: config.port,
+        db: mongoose.connection.readyState
+    });
 });
 
 const start = async () => {
     try {
         mongoose.set('strictQuery', false);
-        await mongoose.connect('mongodb://localhost:27017/db_example?directConnection=true');
-    console.log('Mongo connected');
+        await mongoose.connect(config.mongoUrl);
+    console.log(`Mongo connected to: ${config.mongoDbName}`);
     } catch (err) {
         console.log('Mongo connection error:', err.message);
     }
     app.listen(PORT,()=>{
         console.log(`Server is running on port http://localhost:${PORT}`);
+        console.log(`Environment: ${config.nodeEnv}`);
+        console.log(`Swagger docs available at: http://localhost:${PORT}/api-docs`);
     });
 };
 

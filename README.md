@@ -5,8 +5,50 @@ Sistema de gestión de adopciones de mascotas con funcionalidades de mocking y t
 ## 🚀 Características
 
 - ✅ API REST para gestión de usuarios, mascotas, adopciones y sesiones
-- ✅ Sistema de mocking para generar datos de prueba
-- ✅ Tests funcionales con Mocha y Supertest
+- ✅ Sistema de mocking para generar datos de prue## 🔧 Configuración
+
+### Variables de entorno
+El proyecto utiliza archivos `.env` para la configuración:
+
+```bash
+# Copiar archivo de ejemplo
+cp .env.example .env
+```
+
+**Archivos de configuración:**
+- ✅ `.env` - Configuración de desarrollo
+- ✅ `.env.test` - Configuración para tests
+- ✅ `.env.example` - Plantilla con variables disponibles
+
+**Variables disponibles:**
+```bash
+# Puerto del servidor
+PORT=8080
+
+# Entorno de ejecución
+NODE_ENV=development
+
+# Base de datos MongoDB
+MONGO_URL=mongodb://localhost:27017/db_example
+MONGO_DB_NAME=db_example
+
+# JWT Secret
+JWT_SECRET=your-secret-key-here
+
+# Configuración de CORS
+CORS_ORIGIN=http://localhost:3000
+
+# Directorio de archivos
+UPLOAD_DIR=./src/public/img
+
+# Nivel de logs
+LOG_LEVEL=debug
+```
+
+### Configuración por ambiente:
+- **Development**: Usa `.env`
+- **Testing**: Usa `.env.test` automáticamente
+- **Production**: Usa variables del sistema o `.env.production` ✅ Tests funcionales con Mocha y Supertest
 - ✅ Base de datos MongoDB con Mongoose
 - ✅ Autenticación JWT con cookies
 - ✅ Encriptación de contraseñas con bcrypt
@@ -30,7 +72,15 @@ cd RecursosBackend-Adoptme-main
 npm install
 ```
 
-3. Asegúrate de que MongoDB esté ejecutándose en:
+3. Configura las variables de entorno:
+```bash
+# Copia el archivo de ejemplo
+cp .env.example .env
+
+# Edita el archivo .env con tus configuraciones
+```
+
+4. Asegúrate de que MongoDB esté ejecutándose en:
 ```
 mongodb://localhost:27017/db_example
 ```
@@ -215,33 +265,41 @@ src/test/
 ## 🗄️ Estructura del Proyecto
 
 ```
-src/
-├── controllers/          # Lógica de controladores
-│   ├── adoptions.controller.js
-│   ├── mocks.controller.js
-│   ├── pets.controller.js
-│   ├── sessions.controller.js
-│   └── users.controller.js
-├── routes/               # Definición de rutas
-│   ├── adoption.router.js
-│   ├── mocks.router.js
-│   ├── pets.router.js
-│   ├── sessions.router.js
-│   └── users.router.js
-├── docs/                 # Documentación Swagger
-│   └── swagger.config.js
-├── services/             # Capa de servicios
-├── dao/                  # Data Access Objects
-├── dto/                  # Data Transfer Objects
-├── utils/                # Utilidades
-│   ├── mocking.js        # Generadores de datos ficticios
-│   ├── index.js          # Funciones de utilidad
-│   └── uploader.js       # Configuración de multer
-├── test/                 # Tests funcionales
-│   ├── adoptions.test.js # Tests de adopciones
-│   ├── generateData.test.js
-│   └── mocks.test.js
-└── app.js                # Configuración principal
+├── .env.example          # Plantilla de variables de entorno
+├── .env                  # Variables de entorno (development)
+├── .env.test            # Variables de entorno (testing)
+├── .gitignore           # Archivos ignorados por git
+├── package.json         # Dependencias y scripts
+├── README.md           # Documentación del proyecto
+└── src/
+    ├── config/           # Configuración del proyecto
+    │   └── environment.js  # Carga de variables de entorno
+    ├── controllers/      # Lógica de controladores
+    │   ├── adoptions.controller.js
+    │   ├── mocks.controller.js
+    │   ├── pets.controller.js
+    │   ├── sessions.controller.js
+    │   └── users.controller.js
+    ├── routes/           # Definición de rutas
+    │   ├── adoption.router.js
+    │   ├── mocks.router.js
+    │   ├── pets.router.js
+    │   ├── sessions.router.js
+    │   └── users.router.js
+    ├── docs/             # Documentación Swagger
+    │   └── swagger.config.js
+    ├── services/         # Capa de servicios
+    ├── dao/              # Data Access Objects
+    ├── dto/              # Data Transfer Objects
+    ├── utils/            # Utilidades
+    │   ├── mocking.js    # Generadores de datos ficticios
+    │   ├── index.js      # Funciones de utilidad
+    │   └── uploader.js   # Configuración de multer
+    ├── test/             # Tests funcionales
+    │   ├── adoptions.test.js # Tests de adopciones
+    │   ├── generateData.test.js
+    │   └── mocks.test.js
+    └── app.js            # Configuración principal
 ```
 
 ## � Documentación de la API
