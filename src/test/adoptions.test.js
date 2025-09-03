@@ -13,6 +13,7 @@ const pickFirstId = (arr) => (arr && arr[0] && arr[0]._id) || (arr && arr[0] && 
 
 describe('Adoptions Router - Functional Tests', () => {
   before(async () => {
+    mongoose.set('strictQuery', false);
     await mongoose.connect(MONGO_URL);
   });
 

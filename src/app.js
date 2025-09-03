@@ -44,6 +44,7 @@ app.get('/health', (req, res) => {
 
 const start = async () => {
     try {
+        mongoose.set('strictQuery', false);
         await mongoose.connect('mongodb://localhost:27017/db_example?directConnection=true');
     console.log('Mongo connected');
     } catch (err) {

@@ -8,6 +8,7 @@ const countExampleUsers = (list) => list.filter(u => typeof u.email === 'string'
 
 describe('Mocks Router - generateData', () => {
   before(async () => {
+    mongoose.set('strictQuery', false);
     await mongoose.connect(MONGO_URL);
   });
 
