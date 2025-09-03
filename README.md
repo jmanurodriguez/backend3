@@ -180,7 +180,7 @@ curl -X POST "http://localhost:8080/api/mocks/generateData" \
 
 ## 🧪 Testing
 
-El proyecto incluye una suite completa de tests:
+El proyecto incluye una suite completa de tests funcionales:
 
 ### Ejecutar tests:
 ```bash
@@ -188,48 +188,60 @@ npm test
 ```
 
 ### Tests incluidos:
+- ✅ **Adoptions Router**: Suite completa de tests funcionales
+  - `GET /api/adoptions` - Obtener todas las adopciones
+  - `GET /api/adoptions/:aid` - Obtener adopción específica por ID
+  - `POST /api/adoptions/:uid/:pid` - Crear nueva adopción
+  - Casos de error (usuario inexistente, mascota inexistente, mascota ya adoptada)
+  - Tests de integración y workflow completo
 - ✅ **Mocks Router**: Validación de endpoints de mocking
 - ✅ **GenerateData**: Inserción en BD y verificación
-- ✅ **Adoptions Router**: Tests funcionales completos
-  - Creación de adopciones
-  - Validación de errores (mascota ya adoptada, usuario/mascota inexistente)
-  - Endpoints GET
+
+### Estructura de tests:
+```
+src/test/
+├── adoptions.test.js     # Tests funcionales completos de adoptions
+├── generateData.test.js  # Tests de generación de datos
+└── mocks.test.js        # Tests de endpoints de mocking
+```
 
 ### Cobertura:
-- 7 tests passing
+- 13 tests passing
 - Integración con MongoDB
 - Validación de respuestas y estados HTTP
+- Tests de casos exitosos y de error
+- Verificación de integridad de datos
 
 ## 🗄️ Estructura del Proyecto
 
 ```
 src/
 ├── controllers/          # Lógica de controladores
-│   ├── mocks.controller.js
-│   ├── users.controller.js
-│   ├── pets.controller.js
 │   ├── adoptions.controller.js
-│   └── sessions.controller.js
+│   ├── mocks.controller.js
+│   ├── pets.controller.js
+│   ├── sessions.controller.js
+│   └── users.controller.js
 ├── routes/               # Definición de rutas
-│   ├── mocks.router.js
-│   ├── users.router.js
-│   ├── pets.router.js
 │   ├── adoption.router.js
-│   └── sessions.router.js
+│   ├── mocks.router.js
+│   ├── pets.router.js
+│   ├── sessions.router.js
+│   └── users.router.js
+├── docs/                 # Documentación Swagger
+│   └── swagger.config.js
 ├── services/             # Capa de servicios
 ├── dao/                  # Data Access Objects
-├── models/               # Modelos de Mongoose
+├── dto/                  # Data Transfer Objects
 ├── utils/                # Utilidades
 │   ├── mocking.js        # Generadores de datos ficticios
 │   ├── index.js          # Funciones de utilidad
 │   └── uploader.js       # Configuración de multer
-├── dto/                  # Data Transfer Objects
+├── test/                 # Tests funcionales
+│   ├── adoptions.test.js # Tests de adopciones
+│   ├── generateData.test.js
+│   └── mocks.test.js
 └── app.js                # Configuración principal
-
-test/                     # Tests
-├── mocks.test.js
-├── generateData.test.js
-└── adoptions.test.js
 ```
 
 ## � Documentación de la API
